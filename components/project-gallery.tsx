@@ -1,9 +1,13 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useRef, useEffect } from "react"
 import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
+import gsap from "gsap"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { CloseIcon, CheckIcon } from "./icons"
+
+gsap.registerPlugin(ScrollTrigger)
 
 interface Project {
   id: string
@@ -71,10 +75,55 @@ const projects: Project[] = [
 
 export function ProjectGallery() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
+  const sectionRef = useRef<HTMLElement>(null)
+  const trackRef = useRef<HTMLDivElement>(null)
+  const barRef = useRef<HTMLDivElement>(null)
+  const countRef = useRef<HTMLSpanElement>(null)
+
+  useEffect(() => {
+    const section = sectionRef.current
+    const track = trackRef.current
+    if (!section || !track) return
+
+    const travel = () => track.scrollWidth - window.innerWidth
+    const total = projects.length
+
+    const tween = gsap.to(track, {
+      x: () => -travel(),
+      ease: "none",
+      scrollTrigger: {
+        trigger: section,
+        start: "top top",
+        end: () => "+=" + travel(),
+        pin: true,
+        scrub: 1,
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
+        onUpdate: (self) => {
+          if (countRef.current) {
+            countRef.current.textContent = String(Math.min(total, 1 + Math.floor(self.progress * total)))
+          }
+          if (barRef.current) {
+            barRef.current.style.transform = `scaleX(${self.progress})`
+          }
+        },
+      },
+    })
+
+    return () => {
+      tween.scrollTrigger?.kill()
+      tween.kill()
+    }
+  }, [])
 
   return (
-    <section id="work" className="py-24 md:py-32 px-6 md:px-12 max-w-7xl mx-auto border-t border-white/10">
-      <div className="flex justify-between items-end mb-12 md:mb-20 border-b border-[#222222] pb-8 md:pb-10">
+    <section
+      id="work"
+      ref={sectionRef}
+      className="relative h-[88vh] sm:h-screen flex flex-col justify-between overflow-hidden border-t border-white/10"
+    >
+      {/* Header */}
+      <div className="flex items-end justify-between gap-6 px-6 md:px-12 pt-24 md:pt-28 pb-6">
         <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white">
           Case Studies
         </h2>
@@ -83,41 +132,49 @@ export function ProjectGallery() {
         </span>
       </div>
 
-      {/* Grid of Projects */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-20 md:gap-y-32">
+      {/* Pinned Horizontal Track */}
+      <div ref={trackRef} className="flex-1 flex items-center gap-5 md:gap-6 overflow-hidden px-6 md:px-12">
         {projects.map((project, idx) => (
           <article
             key={project.id}
             onClick={() => setSelectedProject(project)}
-            className={`group cursor-pointer ${idx % 2 === 1 ? "md:mt-24" : ""}`}
+            className="group cursor-pointer relative flex-none w-[82vw] sm:w-[68vw] md:w-[58vw] lg:w-[46vw] h-[42vh] sm:h-[52vh] md:h-[58vh] overflow-hidden rounded-2xl bg-[#111111] border border-white/10"
           >
-            <div className="aspect-[4/3] overflow-hidden bg-[#111111] rounded-2xl border border-white/10 relative">
-              <Image
-                src={project.image}
-                alt={project.title}
-                fill
-                sizes="(max-width: 768px) 100vw, 50vw"
-                className="object-cover opacity-70 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 ease-out"
-                referrerPolicy="no-referrer"
-              />
-              <div className="absolute top-4 right-4 bg-black/70 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 text-[10px] font-mono text-[#FF6B50] font-bold">
-                {project.metrics}
-              </div>
+            <Image
+              src={project.image}
+              alt={project.title}
+              fill
+              sizes="(max-width: 768px) 82vw, 46vw"
+              className="object-cover opacity-85 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 ease-out"
+              referrerPolicy="no-referrer"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/90 via-[#050505]/15 to-transparent pointer-events-none" />
+            <div className="absolute top-4 right-4 bg-black/70 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 text-[10px] font-mono text-[#FF6B50] font-bold">
+              {project.metrics}
             </div>
-
-            <div className="mt-8 flex justify-between items-start gap-4">
-              <div>
-                <h3 className="text-3xl font-extrabold tracking-tight mb-2 text-white relative w-fit group-hover:text-[#FF6B50] transition-colors">
-                  {project.title}
-                  <span className="absolute -bottom-1.5 left-0 w-0 h-0.5 bg-[#FF6B50] transition-all duration-300 group-hover:w-full" />
-                </h3>
-                <p className="text-[#888888] text-[10px] font-mono font-bold uppercase tracking-[0.2em]">
-                  {project.category}
-                </p>
-              </div>
+            <div className="absolute left-6 md:left-8 bottom-5 md:bottom-7 right-6">
+              <span className="text-[10px] font-mono tracking-[0.24em] text-[#FF6B50] font-bold">
+                CASE {String(idx + 1).padStart(2, "0")}
+              </span>
+              <h3 className="font-display uppercase text-3xl md:text-5xl leading-none tracking-[0.01em] text-white mt-2">
+                {project.title}
+              </h3>
+              <p className="text-[#888888] text-[10px] font-mono font-bold uppercase tracking-[0.2em] mt-3">
+                {project.category}
+              </p>
             </div>
           </article>
         ))}
+      </div>
+
+      {/* HUD */}
+      <div className="flex items-center gap-4 px-6 md:px-12 pb-10 pt-4">
+        <div className="flex-1 h-[2px] bg-[#232323] rounded-full overflow-hidden">
+          <div ref={barRef} className="h-full w-full bg-[#FF6B50] origin-left scale-x-0" />
+        </div>
+        <span className="text-[#666666] text-[10px] font-mono uppercase tracking-widest whitespace-nowrap">
+          <span ref={countRef} className="text-white font-bold">1</span> / 04 · scroll
+        </span>
       </div>
 
       {/* Detailed Project Modal */}
