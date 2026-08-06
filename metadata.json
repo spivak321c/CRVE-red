@@ -1,0 +1,6 @@
+{
+  "name": "CRVE Creative Agency",
+  "description": "An independent design and development studio building brands and digital experiences.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
