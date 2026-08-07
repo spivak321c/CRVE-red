@@ -58,6 +58,7 @@ export function Navigation({ onOpenContact }: NavigationProps) {
       setMobileOpen(false)
       const lenis = getLenis()
       if (lenis) {
+        lenis.start()
         lenis.scrollTo(href, { duration: 1.2 })
       } else {
         document.querySelector(href)?.scrollIntoView({ behavior: "smooth" })
