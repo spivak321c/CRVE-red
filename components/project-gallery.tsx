@@ -133,7 +133,7 @@ export function ProjectGallery() {
       </div>
 
       {/* Pinned Horizontal Track */}
-      <div ref={trackRef} className="flex-1 flex items-center gap-5 md:gap-6 overflow-hidden px-6 md:px-12">
+      <div ref={trackRef} className="w-max flex items-center gap-5 md:gap-6 px-6 md:px-12">
         {projects.map((project, idx) => (
           <article
             key={project.id}
@@ -144,11 +144,12 @@ export function ProjectGallery() {
               src={project.image}
               alt={project.title}
               fill
+              loading="eager"
               sizes="(max-width: 768px) 82vw, 46vw"
-              className="object-cover opacity-85 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 ease-out"
+              className="object-cover brightness-110 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 ease-out"
               referrerPolicy="no-referrer"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/90 via-[#050505]/15 to-transparent pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/70 via-[#050505]/10 to-transparent pointer-events-none" />
             <div className="absolute top-4 right-4 bg-black/70 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 text-[10px] font-mono text-[#FF6B50] font-bold">
               {project.metrics}
             </div>
