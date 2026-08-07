@@ -93,7 +93,7 @@ export function Navigation({ onOpenContact }: NavigationProps) {
                   key={link.label}
                   href={link.href}
                   onClick={(e) => handleNavClick(e, link.href)}
-                  className="hover:text-white transition-colors duration-200 py-1 relative group"
+                  className="hover:text-white active:text-white transition-colors duration-200 py-1 relative group"
                 >
                   {link.label}
                   <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#FF6B50] transition-all duration-300 group-hover:w-full" />
@@ -106,7 +106,7 @@ export function Navigation({ onOpenContact }: NavigationProps) {
             <button
               type="button"
               onClick={onOpenContact}
-              className="hidden lg:inline-flex px-6 py-3 bg-[#1a1a1a] hover:bg-white hover:text-black border border-[#333333] hover:border-white text-sm font-semibold uppercase tracking-wider text-white rounded-xl transition-all duration-300 shadow-md items-center gap-2 group cursor-pointer"
+              className="hidden lg:inline-flex px-6 py-3 bg-[#1a1a1a] hover:bg-white hover:text-black active:bg-white active:text-black border border-[#333333] hover:border-white active:border-white text-sm font-semibold uppercase tracking-wider text-white rounded-xl transition-all duration-300 shadow-md items-center gap-2 group cursor-pointer"
             >
               <span>Get Started</span>
               <ArrowUpRightIcon className="w-4.5 h-4.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -115,7 +115,7 @@ export function Navigation({ onOpenContact }: NavigationProps) {
             <button
               type="button"
               onClick={() => setMobileOpen((prev) => !prev)}
-              className="lg:hidden relative z-[1010] p-2.5 text-white bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 active:scale-95 transition-all cursor-pointer"
+              className="lg:hidden relative z-[1010] p-2.5 text-white bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 active:bg-white/10 active:scale-95 transition-all cursor-pointer"
               aria-label="Toggle navigation menu"
               aria-expanded={mobileOpen}
               aria-controls="mobile-drawer"
@@ -148,7 +148,7 @@ export function Navigation({ onOpenContact }: NavigationProps) {
                   <a
                     href={link.href}
                     onClick={(e) => handleNavClick(e, link.href)}
-                    className="text-3xl font-bold tracking-tight text-white hover:text-[#FF6B50] transition-colors block py-2 border-b border-white/10"
+                    className="text-3xl font-bold tracking-tight text-white hover:text-[#FF6B50] active:text-[#FF6B50] transition-colors block py-2 border-b border-white/10"
                   >
                     {link.label}
                   </a>
@@ -165,7 +165,7 @@ export function Navigation({ onOpenContact }: NavigationProps) {
                     setMobileOpen(false)
                     onOpenContact()
                   }}
-                  className="w-full py-4 bg-[#FF6B50] hover:bg-white text-black font-extrabold text-xs uppercase tracking-wider rounded-xl transition-all shadow-xl flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full py-4 bg-[#FF6B50] hover:bg-white active:bg-white text-black font-extrabold text-xs uppercase tracking-wider rounded-xl transition-all shadow-xl flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <span>Start A Project</span>
                   <ArrowUpRightIcon className="w-4 h-4" />

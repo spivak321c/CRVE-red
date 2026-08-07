@@ -73,7 +73,7 @@ export function ContactModal({ isOpen, onClose, initialScope }: ContactModalProp
             <button
               type="button"
               onClick={onClose}
-              className="absolute top-6 right-6 p-2 bg-white/10 hover:bg-white/20 text-white rounded-full transition-colors cursor-pointer"
+              className="absolute top-6 right-6 p-2 bg-white/10 hover:bg-white/20 active:bg-white/20 text-white rounded-full transition-colors cursor-pointer"
               aria-label="Close contact form"
             >
               <CloseIcon className="w-5 h-5" />
@@ -95,7 +95,7 @@ export function ContactModal({ isOpen, onClose, initialScope }: ContactModalProp
                 <button
                   type="button"
                   onClick={resetForm}
-                  className="px-8 py-3.5 bg-white text-black font-extrabold text-xs uppercase rounded-xl hover:bg-neutral-200 transition-colors cursor-pointer"
+                  className="px-8 py-3.5 bg-white text-black font-extrabold text-xs uppercase rounded-xl hover:bg-neutral-200 active:bg-neutral-200 transition-colors cursor-pointer"
                 >
                   Done
                 </button>
@@ -190,7 +190,7 @@ export function ContactModal({ isOpen, onClose, initialScope }: ContactModalProp
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full py-4 bg-[#FF6B50] hover:bg-white text-black font-extrabold text-xs uppercase tracking-wider rounded-xl transition-all duration-300 shadow-xl flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                    className="w-full py-4 bg-[#FF6B50] hover:bg-white active:bg-white text-black font-extrabold text-xs uppercase tracking-wider rounded-xl transition-all duration-300 shadow-xl flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
                   >
                     {loading ? (
                       <span>Sending Inquiry...</span>

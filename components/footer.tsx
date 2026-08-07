@@ -21,14 +21,14 @@ export function Footer({ onOpenContact }: FooterProps) {
         <div className="flex-1">
           <h2
             onClick={onOpenContact}
-            className="text-[16vw] md:text-[11vw] leading-[0.9] font-display tracking-tight text-white hover:text-[#FF6B50] transition-colors duration-500 mb-12 select-none cursor-pointer"
+            className="text-[16vw] md:text-[11vw] leading-[0.9] font-display tracking-tight text-white hover:text-[#FF6B50] active:text-[#FF6B50] transition-colors duration-500 mb-12 select-none cursor-pointer"
           >
             LET&apos;S<br />TALK.
           </h2>
           <div className="flex flex-col gap-6">
             <a
               href="mailto:hello@crve.studio"
-              className="text-2xl sm:text-4xl font-semibold hover:text-[#FF6B50] transition-all w-fit border-b border-white/20 pb-1"
+              className="text-2xl sm:text-4xl font-semibold hover:text-[#FF6B50] active:text-[#FF6B50] transition-all w-fit border-b border-white/20 pb-1"
             >
               hello@crve.studio
             </a>
@@ -47,7 +47,7 @@ export function Footer({ onOpenContact }: FooterProps) {
               href={social.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs font-mono uppercase tracking-[0.2em] text-neutral-400 hover:text-white transition-colors w-fit relative group"
+              className="text-xs font-mono uppercase tracking-[0.2em] text-neutral-400 hover:text-white active:text-white transition-colors w-fit relative group"
             >
               {social.label}
               <span className="absolute -bottom-1 left-0 w-0 h-px bg-[#FF6B50] transition-all duration-300 group-hover:w-full" />
@@ -63,14 +63,14 @@ export function Footer({ onOpenContact }: FooterProps) {
           <button
             type="button"
             onClick={() => setModalType("privacy")}
-            className="hover:text-white transition-colors cursor-pointer"
+            className="hover:text-white active:text-white transition-colors cursor-pointer"
           >
             Privacy Policy
           </button>
           <button
             type="button"
             onClick={() => setModalType("terms")}
-            className="hover:text-white transition-colors cursor-pointer"
+            className="hover:text-white active:text-white transition-colors cursor-pointer"
           >
             Terms of Service
           </button>

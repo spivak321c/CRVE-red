@@ -106,3 +106,10 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #FF6B50;
 }
+
+/* Benefits band: on mobile only the active stage's description shows */
+@media (max-width: 767px) {
+  #benefits .build-stage:not([data-active="true"]) .build-stage-say {
+    display: none;
+  }
+}

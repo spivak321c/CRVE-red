@@ -198,7 +198,7 @@ export function ProjectGallery() {
               <button
                 type="button"
                 onClick={() => setSelectedProject(null)}
-                className="absolute top-6 right-6 p-2 bg-white/10 hover:bg-white/20 text-white rounded-full transition-colors cursor-pointer"
+                className="absolute top-6 right-6 p-2 bg-white/10 hover:bg-white/20 active:bg-white/20 text-white rounded-full transition-colors cursor-pointer"
                 aria-label="Close case study"
               >
                 <CloseIcon className="w-5 h-5" />
@@ -254,7 +254,7 @@ export function ProjectGallery() {
                 <button
                   type="button"
                   onClick={() => setSelectedProject(null)}
-                  className="px-6 py-3 bg-white/10 hover:bg-white/20 text-white text-xs font-bold uppercase rounded-xl transition-colors cursor-pointer"
+                  className="px-6 py-3 bg-white/10 hover:bg-white/20 active:bg-white/20 text-white text-xs font-bold uppercase rounded-xl transition-colors cursor-pointer"
                 >
                   Close Case Study
                 </button>

@@ -85,7 +85,7 @@ export function ServicesEstimator({ onOpenContactWithScope }: ServicesEstimatorP
         {servicesList.map((service) => (
           <div
             key={service.id}
-            className="bg-[#111111] border border-white/10 rounded-3xl p-8 hover:border-[#FF6B50]/50 transition-all duration-300 flex flex-col justify-between group"
+            className="bg-[#111111] border border-white/10 rounded-3xl p-8 hover:border-[#FF6B50]/50 active:border-[#FF6B50]/50 transition-all duration-300 flex flex-col justify-between group"
           >
             <div>
               <h3 className="text-2xl font-bold text-white mb-3">{service.title}</h3>
@@ -137,7 +137,7 @@ export function ServicesEstimator({ onOpenContactWithScope }: ServicesEstimatorP
                 className={`p-4 rounded-2xl border text-left transition-all duration-200 cursor-pointer flex items-start justify-between gap-3 ${
                   active
                     ? "bg-[#FF6B50]/10 border-[#FF6B50] text-white shadow-lg"
-                    : "bg-white/5 border-white/10 text-neutral-400 hover:border-white/20 hover:text-white"
+                    : "bg-white/5 border-white/10 text-neutral-400 hover:border-white/20 hover:text-white active:border-white/20 active:text-white"
                 }`}
               >
                 <div>
@@ -189,7 +189,7 @@ export function ServicesEstimator({ onOpenContactWithScope }: ServicesEstimatorP
             type="button"
             onClick={handleInquireWithScope}
             disabled={selectedScopes.length === 0}
-            className="w-full sm:w-auto px-8 py-4 bg-[#FF6B50] hover:bg-white text-black font-extrabold text-xs uppercase tracking-wider rounded-xl transition-all duration-300 shadow-xl flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full sm:w-auto px-8 py-4 bg-[#FF6B50] hover:bg-white active:bg-white text-black font-extrabold text-xs uppercase tracking-wider rounded-xl transition-all duration-300 shadow-xl flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <span>Book Scope with Estimate</span>
             <ArrowUpRightIcon className="w-4 h-4" />

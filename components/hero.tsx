@@ -41,7 +41,7 @@ export function Hero({ onOpenContact }: HeroProps) {
         <button
           type="button"
           onClick={onOpenContact}
-          className="px-8 py-4 bg-[#FF6B50] hover:bg-white text-black font-extrabold text-xs uppercase tracking-wider rounded-xl transition-all duration-300 shadow-xl hover:shadow-[#FF6B50]/20 cursor-pointer"
+          className="px-8 py-4 bg-[#FF6B50] hover:bg-white active:bg-white text-black font-extrabold text-xs uppercase tracking-wider rounded-xl transition-all duration-300 shadow-xl hover:shadow-[#FF6B50]/20 cursor-pointer"
         >
           Book Discovery Call
         </button>
@@ -63,7 +63,7 @@ export function Hero({ onOpenContact }: HeroProps) {
 
         <a
           href="mailto:hello@crve.studio"
-          className="text-sm font-mono font-semibold tracking-wider uppercase text-white hover:text-[#FF6B50] transition-colors border-b-2 border-white hover:border-[#FF6B50] pb-1"
+          className="text-sm font-mono font-semibold tracking-wider uppercase text-white hover:text-[#FF6B50] active:text-[#FF6B50] transition-colors border-b-2 border-white hover:border-[#FF6B50] active:border-[#FF6B50] pb-1"
         >
           hello@crve.studio
         </a>

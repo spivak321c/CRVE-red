@@ -77,7 +77,7 @@ export function JournalSection() {
               document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" })
             }
           }}
-          className="hidden md:flex items-center gap-1 text-xs font-mono uppercase tracking-wider text-neutral-400 hover:text-white transition-colors"
+          className="hidden md:flex items-center gap-1 text-xs font-mono uppercase tracking-wider text-neutral-400 hover:text-white active:text-white transition-colors"
         >
           <span>Subscribe to Insights</span>
           <ArrowUpRightIcon className="w-4 h-4 text-[#FF6B50]" />
@@ -90,7 +90,7 @@ export function JournalSection() {
           <article
             key={article.id}
             onClick={() => setSelectedArticle(article)}
-            className="p-8 bg-[#111111] hover:bg-[#161616] border border-white/10 rounded-2xl transition-all duration-300 cursor-pointer group flex flex-col md:flex-row md:items-center justify-between gap-6"
+            className="p-8 bg-[#111111] hover:bg-[#161616] active:bg-[#161616] border border-white/10 rounded-2xl transition-all duration-300 cursor-pointer group flex flex-col md:flex-row md:items-center justify-between gap-6"
           >
             <div className="max-w-2xl">
               <div className="flex items-center gap-4 text-xs font-mono text-neutral-500 mb-3">
@@ -100,13 +100,13 @@ export function JournalSection() {
                 <span>&bull;</span>
                 <span>{article.readTime}</span>
               </div>
-              <h3 className="text-2xl font-bold text-white group-hover:text-[#FF6B50] transition-colors mb-2">
+              <h3 className="text-2xl font-bold text-white group-hover:text-[#FF6B50] group-active:text-[#FF6B50] transition-colors mb-2">
                 {article.title}
               </h3>
               <p className="text-neutral-400 text-sm leading-relaxed">{article.summary}</p>
             </div>
 
-            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-white group-hover:text-[#FF6B50] transition-colors shrink-0">
+            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-white group-hover:text-[#FF6B50] group-active:text-[#FF6B50] transition-colors shrink-0">
               <span>Read Article</span>
               <ArrowUpRightIcon className="w-4 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
             </div>
@@ -134,7 +134,7 @@ export function JournalSection() {
               <button
                 type="button"
                 onClick={() => setSelectedArticle(null)}
-                className="absolute top-6 right-6 p-2 bg-white/10 hover:bg-white/20 text-white rounded-full transition-colors cursor-pointer"
+                className="absolute top-6 right-6 p-2 bg-white/10 hover:bg-white/20 active:bg-white/20 text-white rounded-full transition-colors cursor-pointer"
                 aria-label="Close article"
               >
                 <CloseIcon className="w-5 h-5" />
@@ -159,7 +159,7 @@ export function JournalSection() {
                 <button
                   type="button"
                   onClick={() => setSelectedArticle(null)}
-                  className="px-6 py-2.5 bg-white/10 hover:bg-white/20 text-white text-xs font-bold uppercase rounded-xl transition-colors cursor-pointer"
+                  className="px-6 py-2.5 bg-white/10 hover:bg-white/20 active:bg-white/20 text-white text-xs font-bold uppercase rounded-xl transition-colors cursor-pointer"
                 >
                   Close
                 </button>
