@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import { getLenis } from "@/lib/lenis"
 import { MenuIcon, CloseIcon, ArrowUpRightIcon } from "./icons"
@@ -13,6 +14,8 @@ interface NavigationProps {
 export function Navigation({ onOpenContact }: NavigationProps) {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const pathname = usePathname()
+  const isHome = pathname === "/"
 
   useEffect(() => {
     const handleScroll = () => {
@@ -45,15 +48,22 @@ export function Navigation({ onOpenContact }: NavigationProps) {
     return () => window.removeEventListener("keydown", handleKeyDown)
   }, [mobileOpen])
 
-  const navLinks = [
-    { label: "Home", href: "#hero" },
-    { label: "Selected Work", href: "#work" },
-    { label: "Services", href: "#services" },
-    { label: "Journal", href: "#journal" },
-  ]
+  const navLinks = isHome
+    ? [
+        { label: "About", href: "/about" },
+        { label: "Selected Work", href: "#work" },
+        { label: "Services", href: "#services" },
+        { label: "Journal", href: "#journal" },
+      ]
+    : [
+        { label: "About", href: "/about" },
+        { label: "Selected Work", href: "/#work" },
+        { label: "Services", href: "/#services" },
+        { label: "Journal", href: "/#journal" },
+      ]
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    if (href.startsWith("#")) {
+    if (href.startsWith("#") && isHome) {
       e.preventDefault()
       setMobileOpen(false)
       const lenis = getLenis()
@@ -63,6 +73,8 @@ export function Navigation({ onOpenContact }: NavigationProps) {
       } else {
         document.querySelector(href)?.scrollIntoView({ behavior: "smooth" })
       }
+    } else if (!href.startsWith("#")) {
+      setMobileOpen(false)
     }
   }
 
@@ -78,7 +90,13 @@ export function Navigation({ onOpenContact }: NavigationProps) {
             <Link
               href="/"
               className="flex items-center gap-2.5 group relative z-[1010]"
-              onClick={(e) => handleNavClick(e, "#hero")}
+              onClick={(e) => {
+                if (isHome) {
+                  handleNavClick(e, "#hero")
+                } else {
+                  setMobileOpen(false)
+                }
+              }}
             >
               <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center text-black font-display text-2xl leading-none transition-colors duration-300 group-hover:bg-[#FF6B50]">
                 C.
@@ -88,7 +106,7 @@ export function Navigation({ onOpenContact }: NavigationProps) {
               </span>
             </Link>
 
-            <nav className="hidden lg:flex items-center gap-9 text-base font-medium tracking-tight text-neutral-400">
+            <nav className="hidden lg:flex items-center gap-10 text-base font-medium tracking-tight text-neutral-400">
               {navLinks.map((link) => (
                 <a
                   key={link.label}

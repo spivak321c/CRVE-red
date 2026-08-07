@@ -10,19 +10,15 @@ interface WordCycleProps {
   trigger: React.RefObject<HTMLElement | null>
 }
 
+const WORDS = ["/design", "/development", "/motion"]
+
 const CONFIG = {
-  glyphDur: 0.5,
-  exitDur: 0.45,
-  stagger: 0.06,
-  hold: 1.4,
-  gapAfterExit: 0.165,
-  lineGap: 0.3,
-  lineDur: 0.85,
-  words: [
-    { text: "/design", start: 0 },
-    { text: "/development", start: 2.71 },
-    { text: "/motion", start: 5.72 },
-  ],
+  enter: 0.55,
+  hold: 1.25,
+  exit: 0.38,
+  gap: 0.14,
+  lineDur: 0.75,
+  lineGap: 0.14,
 }
 
 export function WordCycle({ trigger }: WordCycleProps) {
@@ -36,92 +32,81 @@ export function WordCycle({ trigger }: WordCycleProps) {
 
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches
 
-    const words = CONFIG.words.map((w) => {
-      const enterEnd = w.start + CONFIG.glyphDur + (w.text.length - 1) * CONFIG.stagger
-      return {
-        text: w.text,
-        start: w.start,
-        holdEnd: enterEnd + CONFIG.hold,
-        exitEnd: enterEnd + CONFIG.hold + CONFIG.exitDur,
-      }
+    const wordEls = WORDS.map((text) => {
+      const el = document.createElement("p")
+      el.className = "crv-word"
+      el.textContent = text
+      el.setAttribute("aria-hidden", "true")
+      stage.appendChild(el)
+      return el
     })
-    const lastExit = words[words.length - 1].exitEnd
-    const s1 = lastExit + CONFIG.gapAfterExit
-    const s2 = s1 + CONFIG.lineGap
 
-    let wordEls: HTMLElement[] = []
-    let glyphSets: HTMLElement[][] = []
-    let statement: HTMLElement
-    let lines: HTMLElement[]
+    const statement = document.createElement("div")
+    statement.className = "crv-statement"
+    statement.setAttribute("aria-hidden", "true")
+    statement.innerHTML =
+      '<span class="crv-line-mask"><span class="crv-line"><span class="crv-light">You</span> Choose<span class="crv-period">.</span></span></span>' +
+      '<span class="crv-line-mask"><span class="crv-line">We <span class="crv-light">Deliver</span><span class="crv-period">.</span></span></span>'
+    stage.appendChild(statement)
+    const lines = Array.from(statement.querySelectorAll(".crv-line"))
 
-    const build = () => {
-      stage.innerHTML = ""
-      wordEls = []
-      glyphSets = []
-      words.forEach((w) => {
-        const word = document.createElement("div")
-        word.className = "crv-word"
-        word.style.display = "none"
-        word.setAttribute("aria-hidden", "true")
-        const mask = document.createElement("span")
-        mask.className = "crv-mask"
-        const fitVw = 95 / (w.text.length * 0.58)
-        mask.style.fontSize = `clamp(3rem, ${Math.min(16, fitVw).toFixed(2)}vw, 12rem)`
-        const glyphs: HTMLElement[] = []
-        w.text.split("").forEach((ch) => {
-          const g = document.createElement("span")
-          g.className = "crv-glyph"
-          g.textContent = ch
-          g.style.transform = "translateY(115%)"
-          g.style.fontWeight = "200"
-          mask.appendChild(g)
-          glyphs.push(g)
-        })
-        word.appendChild(mask)
-        stage.appendChild(word)
-        wordEls.push(word)
-        glyphSets.push(glyphs)
+    // One-time fit: shrink vw-based sizes only if the longest phrase overflows.
+    // Uses an off-screen probe so it never disturbs the live DOM.
+    const fit = () => {
+      const stageW = stage.clientWidth || window.innerWidth
+      const budget = stageW * 0.94
+      const probe = document.createElement("div")
+      probe.style.cssText =
+        "position:fixed;left:-10000px;top:0;visibility:hidden;white-space:nowrap;" +
+        "font-family:inherit;text-transform:lowercase"
+      stage.appendChild(probe)
+      wordEls.forEach((el) => {
+        const cs = getComputedStyle(el)
+        probe.style.cssText +=
+          ";font-size:" + cs.fontSize + ";font-weight:" + cs.fontWeight
+        probe.textContent = el.textContent
+        const w = probe.getBoundingClientRect().width
+        if (w > budget) {
+          const fs = parseFloat(cs.fontSize)
+          el.style.fontSize = Math.max(11, fs * (budget / w)) + "px"
+        }
       })
-
-      statement = document.createElement("div")
-      statement.className = "crv-statement"
-      statement.style.display = "none"
-      statement.setAttribute("aria-hidden", "true")
-      statement.innerHTML =
-        '<span class="crv-line-mask"><span class="crv-line"><span class="crv-light">You</span> choose<span class="crv-period">.</span></span></span>' +
-        '<span class="crv-line-mask"><span class="crv-line">We <span class="crv-light">deliver</span><span class="crv-period">.</span></span></span>'
-      stage.appendChild(statement)
-      lines = Array.from(statement.querySelectorAll(".crv-line"))
+      probe.remove()
     }
+    fit()
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit)
 
     const run = () => {
       if (tlRef.current) tlRef.current.kill()
-      build()
       if (reduced) {
+        wordEls.forEach((el) => (el.style.display = "none"))
         statement.style.display = "flex"
+        statement.style.opacity = "1"
         return
       }
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } })
       tlRef.current = tl
-      words.forEach((w, i) => {
-        const glyphs = glyphSets[i]
-        tl.set(wordEls[i], { display: "flex" }, w.start)
-          .fromTo(
-            glyphs,
-            { yPercent: 115, fontWeight: 200 },
-            { yPercent: 0, fontWeight: 800, duration: CONFIG.glyphDur, stagger: CONFIG.stagger },
-            w.start
-          )
-          .to(glyphs, { yPercent: -115, duration: CONFIG.exitDur, ease: "power2.in" }, w.holdEnd)
-          .set(wordEls[i], { display: "none" }, w.exitEnd)
-      })
-      tl.set(statement, { display: "flex" }, s1)
-        .fromTo(
-          lines,
-          { yPercent: 120 },
-          { yPercent: 0, duration: CONFIG.lineDur, stagger: CONFIG.lineGap },
-          s1
+      let t = 0
+      wordEls.forEach((el) => {
+        tl.fromTo(
+          el,
+          { yPercent: 115, opacity: 0 },
+          { yPercent: 0, opacity: 1, duration: CONFIG.enter },
+          t
+        ).to(
+          el,
+          { yPercent: -115, opacity: 0, duration: CONFIG.exit, ease: "power2.in" },
+          t + CONFIG.enter + CONFIG.hold
         )
+        t += CONFIG.enter + CONFIG.hold + CONFIG.exit + CONFIG.gap
+      })
+      const s1 = t + 0.1
+      tl.fromTo(
+        lines,
+        { yPercent: 120, opacity: 0 },
+        { yPercent: 0, opacity: 1, duration: CONFIG.lineDur, stagger: CONFIG.lineGap },
+        s1
+      )
       tl.play()
     }
 
@@ -152,7 +137,7 @@ export function WordCycle({ trigger }: WordCycleProps) {
     <div
       ref={stageRef}
       className="relative w-full"
-      style={{ minHeight: "calc(clamp(4rem, 15vw, 11rem) * 2.5)" }}
+      style={{ minHeight: "clamp(11rem, 28vw, 22rem)" }}
     >
       <h1 className="sr-only">You choose. We deliver.</h1>
     </div>
